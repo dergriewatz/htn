@@ -6,6 +6,15 @@ parameters:
 services:
     security.authentication.success_handler:
         class: AppBundle\Security\Authentication\AuthenticationHandler
-        arguments: ['@doctrine.orm.default_entity_manager', '@security.http_utils', {}]
+        arguments: ['@doctrine.orm.entity_manager', '@security.http_utils', {}]
         tags:
             - { name: 'monolog.logger', channel: 'security' }
+
+    user.service:
+        class: AppBundle\Service\UserService
+        arguments: ['@user.repository', '@security.password_encoder']
+
+    user.repository:
+        class: AppBundle\Repository\UserRepository
+        arguments: [AppBundle\Entity\User]
+        factory: ["@doctrine.orm.entity_manager", getRepository]

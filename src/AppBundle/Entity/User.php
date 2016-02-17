@@ -171,6 +171,7 @@ final class User implements UserInterface, \Serializable
 
     public function eraseCredentials()
     {
+        return null;
     }
 
     /**
@@ -192,6 +193,7 @@ final class User implements UserInterface, \Serializable
     /**
      * @see \Serializable::unserialize()
      * @param string $serialized
+     * @return UserInterface|void
      */
     public function unserialize($serialized)
     {
@@ -201,5 +203,7 @@ final class User implements UserInterface, \Serializable
             $this->password,
             $this->active,
             ) = unserialize($serialized);
+
+        return $this;
     }
 }
