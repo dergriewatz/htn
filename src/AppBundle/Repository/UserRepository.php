@@ -37,18 +37,26 @@ final class UserRepository extends EntityRepository implements UserLoaderInterfa
     }
 
     /**
-     * @param User $user
+     * @return UserInterface
      */
-    public function save(User $user)
+    public function create()
+    {
+        return new User();
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function save(UserInterface $user)
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function delete(User $user)
+    public function delete(UserInterface $user)
     {
         $this->getEntityManager()->remove($user);
         $this->getEntityManager()->flush();

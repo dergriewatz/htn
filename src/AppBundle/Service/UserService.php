@@ -2,9 +2,9 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserService
 {
@@ -29,9 +29,17 @@ final class UserService
     }
 
     /**
-     * @param User $user
+     * @return UserInterface
      */
-    public function createUser(User $user)
+    public function createUser()
+    {
+        return $this->repository->create();
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function updateUser(UserInterface $user)
     {
         $password = $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword());
         $user->setPassword($password);
