@@ -4,6 +4,8 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    security.authentication.success_handler:
+        class: AppBundle\Security\Authentication\AuthenticationHandler
+        arguments: ['@doctrine.orm.default_entity_manager', '@security.http_utils', {}]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }

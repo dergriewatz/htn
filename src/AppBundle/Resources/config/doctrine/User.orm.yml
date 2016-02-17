@@ -1,0 +1,26 @@
+AppBundle\Entity\User:
+    type: entity
+    repositoryClass: AppBundle\Entity\UserRepository
+    table: user
+    id:
+        id:
+            type: guid
+            generator: { strategy: UUID }
+    fields:
+        username:
+            type: string
+            length: 25
+            unique: true
+        password:
+            type: string
+            length: 64
+        email:
+            type: string
+            length: 255
+            unique: true
+        active:
+            type: boolean
+        lastLogin:
+            type: datetime
+            nullable: true
+            column: last_login
