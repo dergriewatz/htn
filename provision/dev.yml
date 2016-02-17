@@ -1,0 +1,13 @@
+- hosts: all
+  sudo: true
+  vars:
+    document_root: /var/www/htn/web
+  pre_tasks:
+    - name: update apt cache
+      apt: update_cache=yes
+  roles:
+    - common
+    - webserver
+    - database
+    - composer
+#    - symfony

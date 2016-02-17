@@ -1,0 +1,2 @@
+- name: composer install
+  composer: command=install working_dir=/var/www/htn

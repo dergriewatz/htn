@@ -1,0 +1,24 @@
+- name: install apache
+  apt: name=apache2 state=present
+
+- name: copy across new virtual host
+  template:
+    src=apache-site-default.conf.j2
+    dest=/etc/apache2/sites-available/vagrant.conf
+  notify:
+    - reload-apache
+
+- name: remove default virtual host
+  file:
+    path=/etc/apache2/sites-enabled/000-default.conf
+    state=absent
+  notify:
+    - reload-apache
+
+- name: enable new vagrant virtual host
+  file:
+    src=/etc/apache2/sites-available/vagrant.conf
+    dest=/etc/apache2/sites-enabled/vagrant.conf
+    state=link
+  notify:
+    - reload-apache

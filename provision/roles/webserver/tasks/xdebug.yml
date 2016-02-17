@@ -1,0 +1,16 @@
+- name: install php pear
+  apt: name=php-pear state=present
+
+- name: install xdebug
+  pear: name=pecl/xdebug-2.4.0RC4 state=present
+
+- name: copy across new xdebug config
+  template:
+    src=30-xdebug.ini.j2
+    dest=/etc/php/mods-available/xdebug.ini
+  notify:
+    - reload-php7-fpm
+
+- name: set xdebug symlink
+  file: src=/etc/php/mods-available/xdebug.ini dest=/etc/php/7.0/fpm/conf.d/30-xdebug.ini state=link mode=0777
+  file: src=/etc/php/mods-available/xdebug.ini dest=/etc/php/7.0/cli/conf.d/30-xdebug.ini state=link mode=0777

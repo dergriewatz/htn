@@ -1,0 +1,3 @@
+- include: nginx.yml
+- include: php7.yml
+- include: xdebug.yml
