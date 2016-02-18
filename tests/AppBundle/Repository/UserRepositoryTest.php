@@ -3,30 +3,40 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Repository\UserRepository;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tests\AppBundle\IntegrationWebTestCase;
 
 class UserRepositoryTest extends IntegrationWebTestCase
 {
-    /**
-     * @dataProvider loadUserByUsernameProvider
-     * @param $username
-     * @param $expected
-     */
-    public function testLoadUserByUsername($username, $expected)
-    {
-        $user = $this->getUserRepository()->loadUserByUsername($username);
-
-        $this->assertInstanceOf($expected, $user);
-    }
-
-    public function loadUserByUsernameProvider()
+    public function dataProviderTestCreateAndDeleteUser()
     {
         return [
-            ['foo', UserInterface::class],
-            ['bar', UsernameNotFoundException::class],
+            ['foo'],
+            ['mail@example.org'],
         ];
+    }
+
+    /**
+     * @dataProvider dataProviderTestCreateAndDeleteUser
+     * @param $username
+     */
+    public function testCreateAndDeleteUser($username)
+    {
+        $user = $this->getUserRepository()->getNew();
+        $user->setUsername('foo');
+        $user->setPassword('password');
+        $user->setEmail('mail@example.org');
+        $this->assertInstanceOf(UserInterface::class, $user);
+
+        $this->getUserRepository()->save($user);
+
+        $user = $this->getUserRepository()->loadUserByUsername($username);
+        $this->assertInstanceOf(UserInterface::class, $user);
+
+        $this->getUserRepository()->delete($user);
+
+        $this->setExpectedException('Symfony\Component\Security\Core\Exception\UsernameNotFoundException');
+        $this->getUserRepository()->loadUserByUsername($username);
     }
 
     /** @return UserRepository */

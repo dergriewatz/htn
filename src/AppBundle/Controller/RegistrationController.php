@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class RegistrationController extends Controller
+class RegistrationController extends Controller
 {
     /**
      * @param Request $request
@@ -16,7 +16,7 @@ final class RegistrationController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $user = $this->get('user.service')->createUser();
+        $user = $this->get('user.service')->getNewUser();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);

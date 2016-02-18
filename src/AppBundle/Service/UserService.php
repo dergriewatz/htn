@@ -6,7 +6,7 @@ use AppBundle\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class UserService
+class UserService
 {
     /**
      * @var UserRepository
@@ -31,9 +31,9 @@ final class UserService
     /**
      * @return UserInterface
      */
-    public function createUser()
+    public function getNewUser()
     {
-        return $this->repository->create();
+        return $this->repository->getNew();
     }
 
     /**

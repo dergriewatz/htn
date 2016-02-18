@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class UserRepository extends EntityRepository implements UserLoaderInterface
+class UserRepository extends EntityRepository implements UserLoaderInterface
 {
     /**
      * @param string $username
@@ -39,7 +39,7 @@ final class UserRepository extends EntityRepository implements UserLoaderInterfa
     /**
      * @return UserInterface
      */
-    public function create()
+    public function getNew()
     {
         return new User();
     }

@@ -26,8 +26,8 @@
             <directory>src</directory>
             <exclude>
                 <directory>src/*Bundle/Resources</directory>
-                <directory>src/*/*Bundle/Resources</directory>
-                <directory>src/*/Bundle/*Bundle/Resources</directory>
+                <directory>src/*Bundle/Fixtures</directory>
+                <directory>src/*Bundle/Form</directory>
             </exclude>
         </whitelist>
     </filter>

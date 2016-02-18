@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-final class SecurityController extends Controller
+class SecurityController extends Controller
 {
     /**
      * @return Response

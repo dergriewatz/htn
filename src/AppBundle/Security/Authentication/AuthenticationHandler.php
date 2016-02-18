@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Symfony\Component\Security\Http\HttpUtils;
 
-final class AuthenticationHandler extends DefaultAuthenticationSuccessHandler
+class AuthenticationHandler extends DefaultAuthenticationSuccessHandler
 {
     /**
      * @var EntityManager

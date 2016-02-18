@@ -134,8 +134,9 @@ abstract class IntegrationWebTestCase extends WebTestCase
 
     private function resetDb()
     {
-        $this->runCommand('doctrine:schema:drop', ['--force' => true]);
-        $this->runCommand('doctrine:schema:create');
+        $this->runCommand('doctrine:database:drop', ['--force' => true]);
+        $this->runCommand('doctrine:database:create');
+        $this->runCommand('doctrine:migration:migrate', ['--no-interaction' => true]);
         //$this->runCommand('doctrine:fixtures:load', ['--purge-with-truncate' => true]);
     }
 

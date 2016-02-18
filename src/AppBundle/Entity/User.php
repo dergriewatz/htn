@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class User implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable
 {
     /**
      * @var string
