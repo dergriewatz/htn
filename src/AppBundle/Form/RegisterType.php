@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
-class UserType extends AbstractType
+class RegisterType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -24,21 +24,15 @@ class UserType extends AbstractType
             ->add('email', EmailType::class)
             ->add('username', TextType::class)
             ->add(
-                'plainPassword',
+                'plain_password',
                 RepeatedType::class,
                 [
                     'type' => PasswordType::class,
                     'first_options' => ['label' => 'Password'],
                     'second_options' => ['label' => 'Repeat Password'],
                 ]
-            )->add(
-                'termsAccepted',
-                CheckboxType::class,
-                array(
-                    'mapped' => false,
-                    'constraints' => new IsTrue(),
-                )
-            );
+            )
+            ->add('terms_accepted', CheckboxType::class, ['mapped' => false, 'constraints' => new IsTrue()]);
     }
 
     /**
@@ -49,6 +43,7 @@ class UserType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => 'AppBundle\Entity\User',
+                'validation_groups' => ['Default', 'registration'],
             ]
         );
     }
@@ -58,6 +53,6 @@ class UserType extends AbstractType
      */
     public function getName()
     {
-        return 'app_bundle_user_type';
+        return 'app_bundle_register_type';
     }
 }

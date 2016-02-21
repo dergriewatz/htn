@@ -11,6 +11,10 @@ AppBundle\Entity\User:
             type: string
             length: 25
             unique: true
+        slug:
+            type: string
+            length: 25
+            unique: true
         password:
             type: string
             length: 64
@@ -18,6 +22,21 @@ AppBundle\Entity\User:
             type: string
             length: 255
             unique: true
+        gender:
+            type: string
+            length: 1
+            nullable: true
+        homepage:
+            type: string
+            length: 255
+            nullable: true
+        birthday:
+            type: date
+            nullable: true
+        avatar:
+            type: string
+            length: 255
+            nullable: true
         active:
             type: boolean
         lastLogin:

@@ -24,6 +24,7 @@ class UserRepositoryTest extends IntegrationWebTestCase
     {
         $user = $this->getUserRepository()->getNew();
         $user->setUsername('foo');
+        $user->setSlug('foo');
         $user->setPassword('password');
         $user->setEmail('mail@example.org');
         $this->assertInstanceOf(UserInterface::class, $user);

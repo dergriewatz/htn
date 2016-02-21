@@ -4,10 +4,12 @@
     {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
-    {{ form_row(form.plain_password.first) }}
-    {{ form_row(form.plain_password.second) }}
-    {{ form_row(form.terms_accepted) }}
 
-    <button type="submit">Register!</button>
+    {{ form_row(form.gender) }}
+    {{ form_row(form.homepage) }}
+    {{ form_row(form.birthday) }}
+    {{ form_row(form.avatar) }}
+
+    <button type="submit">Save!</button>
     {{ form_end(form) }}
 {% endblock %}

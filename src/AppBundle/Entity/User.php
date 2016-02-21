@@ -2,9 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
+ */
 class User implements UserInterface, \Serializable
 {
     /**
@@ -21,10 +26,15 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      */
+    private $slug;
+
+    /**
+     * @var string
+     */
     private $password;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"registration"})
      * @Assert\Length(max = 4096)
      * @var string
      */
@@ -32,10 +42,35 @@ class User implements UserInterface, \Serializable
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\Email(checkHost = true)
      * @var string
      */
     private $email;
+
+    /**
+     * @Assert\Choice(choices = {"m", "f"})
+     * @var string
+     */
+    private $gender;
+
+    /**
+     * @Assert\Url(checkDNS = true)
+     * @Assert\Length(max = 255)
+     * @var string
+     */
+    private $homepage;
+
+    /**
+     * @Assert\Date()
+     * @var \DateTime
+     */
+    private $birthday;
+
+    /**
+     * @Assert\Length(max = 255)
+     * @var string
+     */
+    private $avatar;
 
     /**
      * @var bool
@@ -77,6 +112,22 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
      * @param $password
      */
     public function setPassword($password)
@@ -114,6 +165,70 @@ class User implements UserInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
+    }
+
+    /**
+     * @param string $homepage
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime $birthday
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
     }
 
     /**

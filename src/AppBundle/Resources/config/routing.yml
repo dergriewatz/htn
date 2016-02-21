@@ -6,6 +6,18 @@ user_registration:
     path: /register
     defaults: { _controller: AppBundle:Registration:register }
 
+user_overview:
+    path: /user
+    defaults: { _controller: AppBundle:User:index }
+
+user_profile:
+    path: /user/{username}
+    defaults: { _controller: AppBundle:User:profile }
+
+user_edit:
+    path: /user/{username}/edit
+    defaults: { _controller: AppBundle:User:edit }
+
 login_route:
     path: /login
     defaults: { _controller: AppBundle:Security:login }

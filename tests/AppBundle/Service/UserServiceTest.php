@@ -5,6 +5,7 @@ namespace Test\AppBundle\Service;
 use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UserService;
+use AppBundle\Utils\Slugger;
 use Prophecy\Argument;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,6 +13,24 @@ use Tests\AppBundle\IntegrationWebTestCase;
 
 class UserServiceTest extends IntegrationWebTestCase
 {
+    public function testGetUserByUsername()
+    {
+        $username = 'foo';
+
+        $user = $this->prophesize(UserInterface::class);
+
+        $repository = $this->prophesize(UserRepository::class);
+        $repository->findOneBy(['slug' => $username])->willReturn($user->reveal());
+
+        $userService = new UserService(
+            $repository->reveal(),
+            $this->prophesize(UserPasswordEncoderInterface::class)->reveal(),
+            $this->prophesize(Slugger::class)->reveal()
+        );
+
+        $this->assertInstanceOf(UserInterface::class, $userService->getUserByUsername($username));
+    }
+
     public function testGetNewUser()
     {
         $user = $this->prophesize(UserInterface::class);
@@ -21,7 +40,8 @@ class UserServiceTest extends IntegrationWebTestCase
 
         $userService = new UserService(
             $repository->reveal(),
-            $this->prophesize(UserPasswordEncoderInterface::class)->reveal()
+            $this->prophesize(UserPasswordEncoderInterface::class)->reveal(),
+            $this->prophesize(Slugger::class)->reveal()
         );
 
         $this->assertInstanceOf(UserInterface::class, $userService->getNewUser($user->reveal()));
@@ -32,6 +52,8 @@ class UserServiceTest extends IntegrationWebTestCase
         $user = $this->prophesize(User::class);
         $user->getPlainPassword()->willReturn('password');
         $user->setPassword('encoded_password')->shouldBeCalled();
+        $user->getUsername()->willReturn('foo');
+        $user->setSlug('foo')->shouldBeCalled();
 
         $repository = $this->prophesize(UserRepository::class);
         $repository->save($user->reveal())->shouldBeCalled();
@@ -39,9 +61,13 @@ class UserServiceTest extends IntegrationWebTestCase
         $userPasswordEncoder = $this->prophesize(UserPasswordEncoderInterface::class);
         $userPasswordEncoder->encodePassword($user->reveal(), Argument::any())->willReturn('encoded_password');
 
+        $slugger = $this->prophesize(Slugger::class);
+        $slugger->slugify(Argument::any())->willReturn('foo');
+
         $userService = new UserService(
             $repository->reveal(),
-            $userPasswordEncoder->reveal()
+            $userPasswordEncoder->reveal(),
+            $slugger->reveal()
         );
 
         $userService->updateUser($user->reveal());

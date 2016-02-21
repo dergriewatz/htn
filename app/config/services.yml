@@ -10,9 +10,12 @@ services:
         tags:
             - { name: 'monolog.logger', channel: 'security' }
 
+    app.slugger:
+        class: AppBundle\Utils\Slugger
+
     user.service:
         class: AppBundle\Service\UserService
-        arguments: ['@user.repository', '@security.password_encoder']
+        arguments: ['@user.repository', '@security.password_encoder', '@app.slugger']
 
     user.repository:
         class: AppBundle\Repository\UserRepository
