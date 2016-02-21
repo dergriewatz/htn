@@ -19,6 +19,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @Assert\NotBlank()
+     * @Assert\Length(min="3", max="25")
      * @var string
      */
     private $username;
@@ -35,27 +36,27 @@ class User implements UserInterface, \Serializable
 
     /**
      * @Assert\NotBlank(groups={"registration"})
-     * @Assert\Length(max = 4096)
+     * @Assert\Length(max="4096")
      * @var string
      */
     private $plainPassword;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Email(checkHost = true)
+     * @Assert\Email(checkHost=true)
      * @var string
      */
     private $email;
 
     /**
-     * @Assert\Choice(choices = {"m", "f"})
+     * @Assert\Choice(choices={"m", "f"})
      * @var string
      */
     private $gender;
 
     /**
-     * @Assert\Url(checkDNS = true)
-     * @Assert\Length(max = 255)
+     * @Assert\Url(checkDNS=true)
+     * @Assert\Length(max="255")
      * @var string
      */
     private $homepage;
@@ -67,7 +68,7 @@ class User implements UserInterface, \Serializable
     private $birthday;
 
     /**
-     * @Assert\Length(max = 255)
+     * @Assert\Length(max="255")
      * @var string
      */
     private $avatar;
