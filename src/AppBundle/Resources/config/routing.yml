@@ -11,12 +11,32 @@ user_overview:
     defaults: { _controller: AppBundle:User:index }
 
 user_profile:
-    path: /user/{username}
+    path: /user/{slug}
     defaults: { _controller: AppBundle:User:profile }
 
 user_edit:
-    path: /user/{username}/edit
+    path: /user/{slug}/edit
     defaults: { _controller: AppBundle:User:edit }
+
+mail_inbox:
+    path: /mail/inbox
+    defaults: { _controller: AppBundle:Mail:inbox }
+
+mail_outbox:
+    path: /mail/outbox
+    defaults: { _controller: AppBundle:Mail:outbox }
+
+mail_archive:
+    path: /mail/archive
+    defaults: { _controller: AppBundle:Mail:archive }
+
+mail_detail:
+    path: /mail/show/{id}
+    defaults: { _controller: AppBundle:Mail:show }
+
+mail_new:
+    path: /mail/new
+    defaults: { _controller: AppBundle:Mail:create }
 
 login_route:
     path: /login

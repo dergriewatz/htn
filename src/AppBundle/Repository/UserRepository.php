@@ -13,7 +13,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 {
     /**
      * @param string $username
-     * @return UserInterface|null
+     * @return User|null
      * @throws NonUniqueResultException|UsernameNotFoundException
      */
     public function loadUserByUsername($username)
@@ -27,7 +27,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 
         if (null === $user) {
             $message = sprintf(
-                'Unable to find an active admin AppBundle:User object identified by "%s".',
+                'Unable to find an active AppBundle:User object identified by "%s".',
                 $username
             );
             throw new UsernameNotFoundException($message);
@@ -37,7 +37,32 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     }
 
     /**
-     * @return UserInterface
+     * @param string $username
+     * @return User|null
+     * @throws NonUniqueResultException|UsernameNotFoundException
+     */
+    public function findOneByUsernameOrSlug($username)
+    {
+        $user = $this->createQueryBuilder('u')
+            ->where('u.username = :username OR u.slug = :slug')
+            ->setParameter('username', $username)
+            ->setParameter('slug', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (null === $user) {
+            $message = sprintf(
+                'Unable to find an active AppBundle:User object identified by "%s".',
+                $username
+            );
+            throw new UsernameNotFoundException($message);
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return User
      */
     public function getNew()
     {
@@ -50,7 +75,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     public function save(UserInterface $user)
     {
         $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($user);
     }
 
     /**
@@ -59,6 +84,6 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     public function delete(UserInterface $user)
     {
         $this->getEntityManager()->remove($user);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($user);
     }
 }

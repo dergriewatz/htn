@@ -309,7 +309,7 @@ class User implements UserInterface, \Serializable
     /**
      * @see \Serializable::unserialize()
      * @param string $serialized
-     * @return UserInterface|void
+     * @return User|void
      */
     public function unserialize($serialized)
     {

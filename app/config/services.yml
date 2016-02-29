@@ -17,7 +17,16 @@ services:
         class: AppBundle\Service\UserService
         arguments: ['@user.repository', '@security.password_encoder', '@app.slugger']
 
+    mail.service:
+        class: AppBundle\Service\MailService
+        arguments: ['@mail.repository', '@user.service', '@security.token_storage']
+
     user.repository:
         class: AppBundle\Repository\UserRepository
         arguments: [AppBundle\Entity\User]
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+
+    mail.repository:
+        class: AppBundle\Repository\MailRepository
+        arguments: [AppBundle\Entity\Mail]
         factory: ["@doctrine.orm.entity_manager", getRepository]

@@ -13,14 +13,14 @@ use Tests\AppBundle\IntegrationWebTestCase;
 
 class UserServiceTest extends IntegrationWebTestCase
 {
-    public function testGetUserByUsername()
+    public function testFindOneBySlug()
     {
-        $username = 'foo';
+        $slug = 'foo';
 
         $user = $this->prophesize(UserInterface::class);
 
         $repository = $this->prophesize(UserRepository::class);
-        $repository->findOneBy(['slug' => $username])->willReturn($user->reveal());
+        $repository->findOneBy(['slug' => $slug])->willReturn($user->reveal());
 
         $userService = new UserService(
             $repository->reveal(),
@@ -28,7 +28,25 @@ class UserServiceTest extends IntegrationWebTestCase
             $this->prophesize(Slugger::class)->reveal()
         );
 
-        $this->assertInstanceOf(UserInterface::class, $userService->getUserByUsername($username));
+        $this->assertInstanceOf(UserInterface::class, $userService->findOneBySlug($slug));
+    }
+
+    public function testFindOneByUsername()
+    {
+        $username = 'foo';
+
+        $user = $this->prophesize(UserInterface::class);
+
+        $repository = $this->prophesize(UserRepository::class);
+        $repository->findOneByUsernameOrSlug($username)->willReturn($user->reveal());
+
+        $userService = new UserService(
+            $repository->reveal(),
+            $this->prophesize(UserPasswordEncoderInterface::class)->reveal(),
+            $this->prophesize(Slugger::class)->reveal()
+        );
+
+        $this->assertInstanceOf(UserInterface::class, $userService->findOneByUsername($username));
     }
 
     public function testGetNewUser()

@@ -19,12 +19,12 @@ class UserController extends Controller
     }
 
     /**
-     * @param string $username
+     * @param string $slug
      * @return RedirectResponse|Response
      */
-    public function profileAction($username)
+    public function profileAction($slug)
     {
-        if (!$user = $this->get('user.service')->getUserByUsername($username)) {
+        if (!$user = $this->get('user.service')->findOneBySlug($slug)) {
             return $this->redirectToRoute('user_overview');
         }
 

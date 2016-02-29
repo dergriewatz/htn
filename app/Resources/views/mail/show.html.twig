@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{# mail \AppBundle\Entity\Mail #}
+
+{% block body %}
+    {{ dump(mail) }}
+
+    <p>Betreff: {{ mail.subject}}</p>
+    <p>Von: {{ mail.user.username }}</p>
+    <p>Zeitpunkt: {{ mail.sendAt|date('H:i:s - d.m.Y') }}</p>
+    <p>{{ mail.text }}</p>
+
+    <a href="{{ path('mail_inbox') }}">zurück zum Postfach</a>
+{% endblock %}

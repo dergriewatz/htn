@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{# mail \AppBundle\Entity\Mail #}
+
+{% block body %}
+    {{ dump(mails) }}
+    <a href="{{ path('mail_new') }}">neue Nachricht</a>
+    <a href="{{ path('mail_inbox') }}">Posteingang</a>
+    <a href="{{ path('mail_outbox') }}">Postausgang</a>
+    <a href="{{ path('mail_archive') }}">Archiv</a>
+    <table>
+        <tr>
+            <th>Absender</th>
+            <th>Betreff</th>
+            <th>Sendezeit</th>
+            <th>Aktionen</th>
+        </tr>
+        {% for mail in mails %}
+        <tr>
+            <td><a href="{{ path('user_profile', {'slug': mail.user.slug}) }}">{{ mail.user.username }}</a></td>
+            <td{% if not mail.read %} class="unread"{% endif %}><a href="{{ path('mail_detail', {'id': mail.id}) }}">{{ mail.subject }}</a></td>
+            <td>{{ mail.sendAt|date('H:i - d.m') }}</td>
+            <td>Antworten, Löschen, Markieren</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

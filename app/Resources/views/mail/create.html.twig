@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.receiver) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.text) }}
+
+    <button type="submit">Send!</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('mail_inbox') }}">zurück zum Postfach</a>
+{% endblock %}

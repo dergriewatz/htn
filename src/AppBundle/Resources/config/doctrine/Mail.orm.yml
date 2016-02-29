@@ -1,0 +1,39 @@
+AppBundle\Entity\Mail:
+    type: entity
+    repositoryClass: AppBundle\Repository\MailRepository
+    table: mail
+    id:
+        id:
+            type: guid
+            generator: { strategy: UUID }
+    fields:
+        subject:
+            type: string
+            nullable: true
+        text:
+            type: text
+        label:
+            type: string
+            length: 50
+        type:
+            type: string
+            length: 10
+        sendAt:
+            type: datetime
+            column: send_at
+        readAt:
+            type: datetime
+            nullable: true
+            column: read_at
+    manyToOne:
+        user:
+            targetEntity: AppBundle\Entity\User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        user2:
+            targetEntity: AppBundle\Entity\User
+            joinColumn:
+                name: user2_id
+                referencedColumnName: id
+                nullable: true
