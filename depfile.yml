@@ -7,6 +7,10 @@ layers:
     collectors:
       - type: className
         regex: .*AppBundle\\Controller.*
+  - name: AppBundleDto
+    collectors:
+      - type: className
+        regex: .*AppBundle\\Dto.*
   - name: AppBundleEntity
     collectors:
       - type: className
@@ -27,6 +31,10 @@ layers:
     collectors:
       - type: className
         regex: .*AppBundle\\Service.*
+  - name: AppBundleUtils
+    collectors:
+      - type: className
+        regex: .*AppBundle\\Utils.*
   - name: Asset
     collectors:
       - type: bool
@@ -291,7 +299,10 @@ ruleset:
     - FrameworkBundle
     - AppBundleForm
     - AppBundleService
+  AppBundleDto:
+    - Validator
   AppBundleEntity:
+    - DoctrineBridge
     - Security
     - Validator
   AppBundleForm:
@@ -307,4 +318,6 @@ ruleset:
     - HttpFoundation
   AppBundleService:
     - Security
+    - AppBundleDto
     - AppBundleRepository
+    - AppBundleUtils
