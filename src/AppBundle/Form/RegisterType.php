@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\UserInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -42,7 +43,7 @@ class RegisterType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'AppBundle\Entity\User',
+                'data_class' => UserInterface::class,
                 'validation_groups' => ['Default', 'registration'],
             ]
         );

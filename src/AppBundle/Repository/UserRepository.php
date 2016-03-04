@@ -3,17 +3,17 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserRepository extends EntityRepository implements UserLoaderInterface
 {
     /**
      * @param string $username
-     * @return User|null
+     * @return UserInterface|null
      * @throws NonUniqueResultException|UsernameNotFoundException
      */
     public function loadUserByUsername($username)
@@ -38,7 +38,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 
     /**
      * @param string $username
-     * @return User|null
+     * @return UserInterface|null
      * @throws NonUniqueResultException|UsernameNotFoundException
      */
     public function findOneByUsernameOrSlug($username)
@@ -62,7 +62,7 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getNew()
     {

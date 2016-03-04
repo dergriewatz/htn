@@ -2,11 +2,10 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Utils\Slugger;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserService
 {
@@ -36,7 +35,7 @@ class UserService
 
     /**
      * @param string $slug
-     * @return User
+     * @return UserInterface
      */
     public function findOneBySlug($slug)
     {
@@ -45,7 +44,7 @@ class UserService
 
     /**
      * @param string $username
-     * @return User
+     * @return UserInterface
      */
     public function findOneByUsername($username)
     {
@@ -53,7 +52,7 @@ class UserService
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getNewUser()
     {

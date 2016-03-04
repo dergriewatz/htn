@@ -3,7 +3,7 @@
 namespace Test\AppBundle\Entity;
 
 use AppBundle\Entity\Mail;
-use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class MailTest extends KernelTestCase
@@ -16,8 +16,8 @@ class MailTest extends KernelTestCase
         $type = Mail::TYPE_USER;
 
         $mail = new Mail();
-        $mail->setUser($this->prophesize(User::class)->reveal());
-        $mail->setUser2($this->prophesize(User::class)->reveal());
+        $mail->setUser($this->prophesize(UserInterface::class)->reveal());
+        $mail->setUser2($this->prophesize(UserInterface::class)->reveal());
         $mail->setSubject($subject);
         $mail->setText($text);
         $mail->setLabel($label);
@@ -26,8 +26,8 @@ class MailTest extends KernelTestCase
         $mail->markAsRead();
 
         $this->assertEquals('', $mail->getId());
-        $this->assertInstanceOf(User::class, $mail->getUser());
-        $this->assertInstanceOf(User::class, $mail->getUser2());
+        $this->assertInstanceOf(UserInterface::class, $mail->getUser());
+        $this->assertInstanceOf(UserInterface::class, $mail->getUser2());
         $this->assertEquals($subject, $mail->getSubject());
         $this->assertEquals($text, $mail->getText());
         $this->assertEquals($label, $mail->getLabel());

@@ -20,7 +20,11 @@
             <td><a href="{{ path('user_profile', {'slug': mail.user.slug}) }}">{{ mail.user.username }}</a></td>
             <td{% if not mail.read %} class="unread"{% endif %}><a href="{{ path('mail_detail', {'id': mail.id}) }}">{{ mail.subject }}</a></td>
             <td>{{ mail.sendAt|date('H:i - d.m') }}</td>
-            <td>Antworten, Löschen, Markieren</td>
+            <td>
+                <a href="{{ path('mail_reply', {'id': mail.id}) }}">Antworten</a>,
+                Löschen,
+                Markieren
+            </td>
         </tr>
         {% endfor %}
     </table>

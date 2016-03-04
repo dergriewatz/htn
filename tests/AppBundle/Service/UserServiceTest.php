@@ -3,12 +3,12 @@
 namespace Test\AppBundle\Service;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UserService;
 use AppBundle\Utils\Slugger;
 use Prophecy\Argument;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Tests\AppBundle\IntegrationWebTestCase;
 
 class UserServiceTest extends IntegrationWebTestCase
@@ -17,7 +17,7 @@ class UserServiceTest extends IntegrationWebTestCase
     {
         $slug = 'foo';
 
-        $user = $this->prophesize(UserInterface::class);
+        $user = $this->prophesize(User::class);
 
         $repository = $this->prophesize(UserRepository::class);
         $repository->findOneBy(['slug' => $slug])->willReturn($user->reveal());
@@ -35,7 +35,7 @@ class UserServiceTest extends IntegrationWebTestCase
     {
         $username = 'foo';
 
-        $user = $this->prophesize(UserInterface::class);
+        $user = $this->prophesize(User::class);
 
         $repository = $this->prophesize(UserRepository::class);
         $repository->findOneByUsernameOrSlug($username)->willReturn($user->reveal());
@@ -51,7 +51,7 @@ class UserServiceTest extends IntegrationWebTestCase
 
     public function testGetNewUser()
     {
-        $user = $this->prophesize(UserInterface::class);
+        $user = $this->prophesize(User::class);
 
         $repository = $this->prophesize(UserRepository::class);
         $repository->getNew()->willReturn($user->reveal());

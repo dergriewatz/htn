@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Dto\MailDto;
 use AppBundle\Entity\Mail;
 use AppBundle\Form\MailType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MailController extends Controller
 {
@@ -16,7 +18,7 @@ class MailController extends Controller
      */
     public function inboxAction()
     {
-        $mails = $this->get('mail.service')->findByLabel(Mail::LABEL_INBOX);
+        $mails = $this->get('mail.service')->getMailsByLabel(Mail::LABEL_INBOX);
 
         return $this->render('mail/overview.html.twig', ['mails' => $mails]);
     }
@@ -26,7 +28,7 @@ class MailController extends Controller
      */
     public function outboxAction()
     {
-        $mails = $this->get('mail.service')->findByLabel(Mail::LABEL_OUTBOX);
+        $mails = $this->get('mail.service')->getMailsByLabel(Mail::LABEL_OUTBOX);
 
         return $this->render('mail/overview.html.twig', ['mails' => $mails]);
     }
@@ -36,7 +38,7 @@ class MailController extends Controller
      */
     public function archiveAction()
     {
-        $mails = $this->get('mail.service')->findByLabel(Mail::LABEL_ARCHIVE);
+        $mails = $this->get('mail.service')->getMailsByLabel(Mail::LABEL_ARCHIVE);
 
         return $this->render('mail/overview.html.twig', ['mails' => $mails]);
     }
@@ -47,7 +49,9 @@ class MailController extends Controller
      */
     public function showAction($id)
     {
-        $mail = $this->get('mail.service')->findOneById($id);
+        if (!$mail = $this->get('mail.service')->getMailById($id)) {
+            throw new NotFoundHttpException(sprintf('Mail with id "%s" not found', $id));
+        }
 
         $this->get('mail.service')->updateReadStatus($mail);
 
@@ -67,6 +71,30 @@ class MailController extends Controller
             $this->get('mail.service')->sendMail($form->getData());
 
             return $this->redirectToRoute('mail_new');
+        }
+
+        return $this->render('mail/create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function replyAction(Request $request, $id)
+    {
+        if (!$mail = $this->get('mail.service')->getMailById($id)) {
+            throw new NotFoundHttpException(sprintf('Mail with id "%s" not found', $id));
+        }
+
+        $mailDto = $this->get('mail.service')->updateForReply(MailDto::fromMail($mail));
+
+        $form = $this->createForm(MailType::class, $mailDto);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get('mail.service')->sendMail($form->getData());
+
+            return $this->redirectToRoute('mail_reply', ['id' => $mail->getId()]);
         }
 
         return $this->render('mail/create.html.twig', ['form' => $form->createView()]);

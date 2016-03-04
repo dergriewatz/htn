@@ -4,19 +4,18 @@ namespace Test\AppBundle\Service;
 
 use AppBundle\Dto\MailDto;
 use AppBundle\Entity\Mail;
-use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use AppBundle\Repository\MailRepository;
 use AppBundle\Service\MailService;
 use AppBundle\Service\UserService;
 use Prophecy\Argument;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Tests\AppBundle\IntegrationWebTestCase;
 
 class MailServiceTest extends IntegrationWebTestCase
 {
-    public function testFindByLabel()
+    public function testGetMailsByLabell()
     {
         $label = Mail::LABEL_INBOX;
 
@@ -35,10 +34,10 @@ class MailServiceTest extends IntegrationWebTestCase
             $tokenStorage->reveal()
         );
 
-        $this->assertInstanceOf(Mail::class, $mailService->findByLabel($label)[0]);
+        $this->assertInstanceOf(Mail::class, $mailService->getMailsByLabel($label)[0]);
     }
 
-    public function testFindOneById()
+    public function testGetMailById()
     {
         $id = '123';
 
@@ -57,7 +56,7 @@ class MailServiceTest extends IntegrationWebTestCase
             $tokenStorage->reveal()
         );
 
-        $this->assertInstanceOf(Mail::class, $mailService->findOneById($id));
+        $this->assertInstanceOf(Mail::class, $mailService->getMailById($id));
     }
 
     public function testUpdateReadStatus()
@@ -78,6 +77,42 @@ class MailServiceTest extends IntegrationWebTestCase
         $mailService->updateReadStatus($mail->reveal());
     }
 
+    public function dataProviderTestUpdateForReply()
+    {
+        return [
+            ['Hallo', 'Re: Hallo'],
+            ['Re: Hallo', 'Re[2]: Hallo'],
+            ['Re[5]: Hallo', 'Re[6]: Hallo'],
+            ['aRe[5]: Hallo', 'Re: aRe[5]: Hallo'],
+            ['Re: Re[123]: Hallo', 'Re[2]: Re[123]: Hallo'],
+            ['Re:Hallo', 'Re[2]:Hallo'],
+            ['ReHallo', 'Re: ReHallo'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderTestUpdateForReply
+     */
+    public function testUpdateForReply($subject, $expectedSubject)
+    {
+        $expectedText = "\n\n\n--- Ursprüngliche Nachricht von foo ---\n\nAlte Nachricht";
+
+        $mailDto = $this->prophesize(MailDto::class);
+        $mailDto->getSubject()->willReturn($subject);
+        $mailDto->getSender()->willReturn('foo');
+        $mailDto->getText()->willReturn('Alte Nachricht');
+        $mailDto->setSubject($expectedSubject)->shouldBeCalled();
+        $mailDto->setText($expectedText)->shouldBeCalled();
+
+        $mailService = new MailService(
+            $this->prophesize(MailRepository::class)->reveal(),
+            $this->prophesize(UserService::class)->reveal(),
+            $this->prophesize(TokenStorageInterface::class)->reveal()
+        );
+
+        $mailService->updateForReply($mailDto->reveal());
+    }
+
     public function testSendMail()
     {
         $token = $this->prophesize(TokenInterface::class);
@@ -87,7 +122,7 @@ class MailServiceTest extends IntegrationWebTestCase
         $tokenStorage->getToken()->willReturn($token);
 
         $userService = $this->prophesize(UserService::class);
-        $userService->findOneByUsername(Argument::any())->willReturn($user2 = $this->prophesize(User::class)->reveal());
+        $userService->findOneByUsername(Argument::any())->willReturn($user2 = $this->prophesize(UserInterface::class)->reveal());
 
         $repository = $this->prophesize(MailRepository::class);
         $repository->createMail($user2, $user, Argument::any(), Argument::any())

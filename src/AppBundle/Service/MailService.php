@@ -37,24 +37,28 @@ class MailService
      * @param string $label
      * @return \AppBundle\Entity\Mail[]
      */
-    public function findByLabel($label)
+    public function getMailsByLabel($label)
     {
-        return $this->repository->findBy([
-            'user' => $this->tokenStorage->getToken()->getUser(),
-            'label' => $label,
-        ]);
+        return $this->repository->findBy(
+            [
+                'user' => $this->tokenStorage->getToken()->getUser(),
+                'label' => $label,
+            ]
+        );
     }
 
     /**
      * @param string $id
      * @return Mail
      */
-    public function findOneById($id)
+    public function getMailById($id)
     {
-        return $this->repository->findOneBy([
-            'user' => $this->tokenStorage->getToken()->getUser(),
-            'id' => $id
-        ]);
+        return $this->repository->findOneBy(
+            [
+                'user' => $this->tokenStorage->getToken()->getUser(),
+                'id' => $id,
+            ]
+        );
     }
 
     /**
@@ -66,6 +70,62 @@ class MailService
             $mail->markAsRead();
             $this->repository->save($mail);
         }
+    }
+
+    /**
+     * @param MailDto $mailDto
+     * @return MailDto
+     */
+    public function updateForReply(MailDto $mailDto)
+    {
+        $mailDto->setSubject(
+            $this->modifyReplySubject($mailDto->getSubject())
+        );
+
+        $mailDto->setText(
+            $this->modifyReplyText($mailDto->getText(), $mailDto->getSender())
+        );
+
+        return $mailDto;
+    }
+
+    /**
+     * @param string $subject
+     * @return string
+     */
+    private function modifyReplySubject($subject)
+    {
+        preg_match('/^Re(\[(\d+)\])?\:/i', $subject, $matches);
+
+        if ($matches) {
+            $subject = str_replace($matches[0], '', $subject);
+        }
+
+        if (1 === count($matches)) {
+            return sprintf('Re[2]:%s', $subject);
+        }
+
+        if (3 === count($matches)) {
+            return sprintf('Re[%d]:%s', $matches[2] + 1, $subject);
+        }
+
+        return sprintf('Re: %s', $subject);
+    }
+
+    /**
+     * @param string $text
+     * @param string $sender
+     * @return string
+     */
+    private function modifyReplyText($text, $sender)
+    {
+        $text = sprintf(
+            "\n\n\n--- Ursprüngliche Nachricht von %s ---\n\n%s",
+            $sender,
+            $text
+        );
+
+        return $text;
     }
 
     /**

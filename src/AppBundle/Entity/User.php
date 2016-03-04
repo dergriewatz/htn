@@ -3,14 +3,14 @@
 namespace AppBundle\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, SymfonyUserInterface, \Serializable
 {
     /**
      * @var string
@@ -86,6 +86,14 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->active = true;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->username;
     }
 
     /**
@@ -309,7 +317,7 @@ class User implements UserInterface, \Serializable
     /**
      * @see \Serializable::unserialize()
      * @param string $serialized
-     * @return User|void
+     * @return UserInterface|void
      */
     public function unserialize($serialized)
     {

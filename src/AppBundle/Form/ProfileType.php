@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\UserInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -43,7 +44,7 @@ class ProfileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'AppBundle\Entity\User']);
+        $resolver->setDefaults(['data_class' => UserInterface::class]);
     }
 
     /**

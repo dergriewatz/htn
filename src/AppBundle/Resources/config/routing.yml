@@ -38,6 +38,10 @@ mail_new:
     path: /mail/new
     defaults: { _controller: AppBundle:Mail:create }
 
+mail_reply:
+    path: /mail/reply/{id}
+    defaults: { _controller: AppBundle:Mail:reply }
+
 login_route:
     path: /login
     defaults: { _controller: AppBundle:Security:login }

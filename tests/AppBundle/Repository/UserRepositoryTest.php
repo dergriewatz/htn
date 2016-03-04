@@ -2,8 +2,8 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\UserInterface;
 use AppBundle\Repository\UserRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Tests\AppBundle\IntegrationWebTestCase;
 
 class UserRepositoryTest extends IntegrationWebTestCase

@@ -3,8 +3,8 @@
 namespace Test\AppBundle\Entity;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserTest extends KernelTestCase
 {
@@ -47,5 +47,7 @@ class UserTest extends KernelTestCase
         $this->assertInstanceOf(\DateTime::class, $user->getLastLogin());
         $this->assertEquals(null, $user->eraseCredentials());
         $this->assertInstanceOf(UserInterface::class, $user->unserialize($user->serialize()));
+        $this->assertEquals($username, $user);
+        $this->assertInstanceOf(UserInterface::class, $user);
     }
 }

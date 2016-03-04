@@ -3,8 +3,8 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Mail;
+use AppBundle\Entity\UserInterface;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class MailRepository extends EntityRepository
 {

@@ -35,7 +35,7 @@ class MailRepositoryTest extends IntegrationWebTestCase
 
         $this->getMailRepository()->delete($mail);
 
-        $mail = $this->getMailRepository()->find($mailIdentifier);
+        $this->assertNull($this->getMailRepository()->find($mailIdentifier));
     }
 
     /** @return MailRepository */

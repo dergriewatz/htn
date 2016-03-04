@@ -19,12 +19,12 @@ class Mail
     private $id;
 
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user;
 
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user2;
 
@@ -72,7 +72,7 @@ class Mail
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getUser()
     {
@@ -80,7 +80,7 @@ class Mail
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      */
     public function setUser($user)
     {
@@ -88,7 +88,7 @@ class Mail
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getUser2()
     {
@@ -96,7 +96,7 @@ class Mail
     }
 
     /**
-     * @param User $user2
+     * @param UserInterface $user2
      */
     public function setUser2($user2)
     {
