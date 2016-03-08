@@ -62,6 +62,15 @@ class MailService
     }
 
     /**
+     * @param string $id
+     * @return Mail|null
+     */
+    public function getReplyMail($id)
+    {
+        return $this->repository->findAnswerableMailById($id, $this->tokenStorage->getToken()->getUser());
+    }
+
+    /**
      * @param Mail $mail
      */
     public function updateReadStatus(Mail $mail)

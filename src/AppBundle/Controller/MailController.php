@@ -82,7 +82,7 @@ class MailController extends Controller
      */
     public function replyAction(Request $request, $id)
     {
-        if (!$mail = $this->get('mail.service')->getMailById($id)) {
+        if (!$mail = $this->get('mail.service')->getReplyMail($id)) {
             throw new NotFoundHttpException(sprintf('Mail with id "%s" not found', $id));
         }
 

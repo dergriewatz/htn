@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Mail;
 use AppBundle\Entity\UserInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class MailRepository extends EntityRepository
 {
@@ -37,6 +38,27 @@ class MailRepository extends EntityRepository
         }
 
         return $mail;
+    }
+
+    /**
+     * @param $id
+     * @param UserInterface $user
+     * @return Mail|null
+     * @throws NonUniqueResultException
+     */
+    public function findAnswerableMailById($id, UserInterface $user)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.id = :id')
+            ->andWhere('m.user = :user')
+            ->andWhere('m.type != :type')
+            ->setParameters([
+                'id' => $id,
+                'user' => $user,
+                'type' => Mail::TYPE_SYSTEM,
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**

@@ -59,6 +59,28 @@ class MailServiceTest extends IntegrationWebTestCase
         $this->assertInstanceOf(Mail::class, $mailService->getMailById($id));
     }
 
+    public function testGetReplyMail()
+    {
+        $id = '123';
+
+        $token = $this->prophesize(TokenInterface::class);
+        $token->getUser()->willReturn($user = $this->prophesize(UserInterface::class)->reveal());
+
+        $tokenStorage = $this->prophesize(TokenStorageInterface::class);
+        $tokenStorage->getToken()->willReturn($token);
+
+        $repository = $this->prophesize(MailRepository::class);
+        $repository->findAnswerableMailById($id, $user)->willReturn($this->prophesize(Mail::class)->reveal());
+
+        $mailService = new MailService(
+            $repository->reveal(),
+            $this->prophesize(UserService::class)->reveal(),
+            $tokenStorage->reveal()
+        );
+
+        $this->assertInstanceOf(Mail::class, $mailService->getReplyMail($id));
+    }
+
     public function testUpdateReadStatus()
     {
         $mail = $this->prophesize(Mail::class);

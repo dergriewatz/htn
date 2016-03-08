@@ -19,9 +19,12 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     public function loadUserByUsername($username)
     {
         $user = $this->createQueryBuilder('u')
-            ->where('u.username = :username OR u.email = :email')
-            ->setParameter('username', $username)
-            ->setParameter('email', $username)
+            ->where('u.username = :username')
+            ->orWhere('u.email = :email')
+            ->setParameters([
+                'username' => $username,
+                'email' => $username,
+            ])
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -44,9 +47,12 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     public function findOneByUsernameOrSlug($username)
     {
         $user = $this->createQueryBuilder('u')
-            ->where('u.username = :username OR u.slug = :slug')
-            ->setParameter('username', $username)
-            ->setParameter('slug', $username)
+            ->where('u.username = :username')
+            ->orWhere('u.slug = :slug')
+            ->setParameters([
+                'username' => $username,
+                'slug' => $username,
+            ])
             ->getQuery()
             ->getOneOrNullResult();
 
